@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  width: 20%;
+  background-color: lavender;
+}
+
+.knwl-toolbar {
+  height: 30px;
+}
+
+.knwl-group-viewport {
+  height: 400px;
+  border: 1px solid black;
+}
+
+.knwl-group {
+  height: 50px;
+}

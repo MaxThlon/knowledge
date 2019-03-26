@@ -1,0 +1,32 @@
+<mat-toolbar class="knwl-toolbar">
+  <thlon-menu [hidden]="!selectedKnwlGroup" [rootMenuItemList]="menuItemList"></thlon-menu>
+</mat-toolbar>
+<cdk-virtual-scroll-viewport itemSize="50" class="knwl-group-viewport">
+  <div *cdkVirtualFor="let knwlGroup of knwlGroupDataSource" class="knwl-group">
+    <span [class.selected]="knwlGroup === selectedKnwlGroup" (click)="onSelect(knwlGroup)">
+      <!--<span class="badge">{{knwlGroup.id}}</span>-->
+      {{knwlGroup.name}}
+    </span>
+  </div>
+</cdk-virtual-scroll-viewport>
+<!--
+    <ul *ngIf="knwlGroupList | async as knwlGroupListS else noData">
+      <li *ngFor="let knwlGroup of knwlGroupListS">
+        <span [class.selected]="knwlGroup === selectedKnwlGroup" (click)="onSelect(knwlGroup)">
+          <span class="badge">{{knwlGroup.id}}</span> {{knwlGroup.name}}
+        </span>
+        <app-thlon-menu></app-thlon-menu>
+      </li>
+    </ul>
+    <ng-template #noData>No Data Available</ng-template>
+  </ul> -->
+<!--<div *ngIf="selectedKnwlGroup">
+    <h2>{{selectedKnwlGroup.name | uppercase}} Details</h2>
+    <div><span>id: </span>{{selectedKnwlGroup.id}}</div>
+    <div>
+      <label>name:
+        <input [(ngModel)]="selectedKnwlGroup.name" placeholder="name">
+      </label>
+    </div>
+    <app-knwl-group [knwlGroup]="selectedKnwlGroup"></app-knwl-group>
+  </div>-->
