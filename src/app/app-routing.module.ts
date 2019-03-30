@@ -1,8 +1,10 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AppAuthGuard } from './app.authguard';
-import { ThlonLogoutComponent } from './thlon-logout/thlon-logout.component';
-import { KnwlGroupListComponent } from './knwl-group/components/knwl-group-list/knwl-group-list.component';
+import {NgModule} from '@angular/core';
+import {Routes,
+        RouterModule} from '@angular/router';
+
+import {AppAuthGuard} from 'thlon-keycloak';
+import {ThlonLogoutComponent} from 'thlon-keycloak';
+//import {ThlonGroupComponent} from 'thlon-group';
 
 const routes: Routes = [
   //  {
@@ -12,11 +14,8 @@ const routes: Routes = [
   //  },
   {
     path: 'grouplist',
-    component: KnwlGroupListComponent,
-    canActivate: [AppAuthGuard]
-  }, {
-    path: 'grouplist2',
-    component: KnwlGroupListComponent,
+    //component: ThlonGroupComponent,
+    loadChildren: './lazy/lazy.module#LazyModule',
     canActivate: [AppAuthGuard]
   },
   {

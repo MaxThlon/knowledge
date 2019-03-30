@@ -14,21 +14,19 @@ import {HttpClientModule,
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {TranslateModule,
         TranslateLoader} from '@ngx-translate/core';
-import {TranslateHttpLoader } from '@ngx-translate/http-loader';
-import {KeycloakService,
-        KeycloakAngularModule} from 'keycloak-angular';
-import {InjectableRxStompConfig,
-        RxStompService,
-        rxStompServiceFactory} from '@stomp/ng2-stompjs';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {KeycloakAngularModule,
+        KeycloakService} from 'keycloak-angular';
+import {RxStompService} from '@stomp/ng2-stompjs';
 
-import {keycloakServiceInitializer} from './app-initilizer';
+import {ThlonKeycloakModule,
+        keycloakServiceInitializer} from 'thlon-keycloak';
+import {keycloakStompServiceInitializer} from 'thlon-stomp';
+import {ThlonMenuModule} from 'thlon-menu';
+
 import {environment} from '../environments/environment';
 import {AppRoutingModule} from './app-routing.module';
-import {AppAuthGuard} from './app.authguard';
 import {AppComponent} from './app.component';
-import {ThlonMenuModule} from 'thlon-menu';
-import {KnwlGroupListComponent} from './knwl-group/components/knwl-group-list/knwl-group-list.component';
-import {ThlonLogoutComponent} from './thlon-logout/thlon-logout.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -37,18 +35,17 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   imports: [
     BrowserModule,
-    KeycloakAngularModule,
-    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ScrollingModule,
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    ScrollingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -56,18 +53,28 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    KeycloakAngularModule,
+    ThlonKeycloakModule,
     ThlonMenuModule
   ],
   declarations: [
-    AppComponent,
-    KnwlGroupListComponent,
-    ThlonLogoutComponent,
+    AppComponent
   ],
   providers: [
     RxStompService,
     {
       provide: APP_INITIALIZER,
-      useFactory: keycloakServiceInitializer,
+      useFactory: (keycloakService: KeycloakService) => keycloakServiceInitializer(environment.keycloakConfig,
+                                                                                   keycloakService),
+      multi: true,
+      deps: [KeycloakService]
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (keycloakService: KeycloakService,
+                   rxStompService: RxStompService) => keycloakStompServiceInitializer(keycloakService,
+                                                                                      environment.injectableRxStompConfig,
+                                                                                      rxStompService),
       multi: true,
       deps: [KeycloakService,
              RxStompService]
